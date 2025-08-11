@@ -1,0 +1,26 @@
+﻿@using WebApplication10.Data.Entities
+
+@model Employee
+
+<h1> Информация о сотруднике</h1>
+<hr />
+
+<p>
+    <b>идентификатор сотрудника</b>: @Model.Id
+<p>
+
+<p>
+    <b>Имя сотрудника</b>: @Model.FirstName
+<p>
+
+<p>
+    <b>Фамилия сотрудника</b>: @Model.LastName
+<p>
+
+<p>
+    <b>Адрес электронной почты сотрудника</b>: @Model.Email
+<p>
+
+<p>
+    <b>Дата регистрации сотрудника</b>: @Model.CreatedAt
+<p>
