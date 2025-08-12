@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Подключаем CSS -->
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+@using WebApplication10.Data.Entities
+@model Employee
+
+@{
+    ViewBag.Title = "Регистрация нового работника";
+}
+
+<h1>Регистрация нового работника</h1>
+<hr />
+
+    <div asp-validation-summary="All"></div>
+
+    <form method="post" asp-action="SaveNewEmployee, class="adaptive-form">
+        <div class="form-grid">
+            <div class="form-row">
+                <label for="LastName">Фамилия:</label>
+                <input type="text" name="LastName" required /><br />
+            </div>
+    
+            <div class="form-row">
+                <label for="FirstName">Имя:</label>
+                <input type="text" name="FirstName" required /><br />
+            </div>
+            <div class="form-row">
+                <label for="MiddleName">Отчество:</label>
+                <input type="text" name="MiddleName" required /><br />
+            </div>
+            <div class="form-row">
+                <label for="Education">Образование:</label>
+                <input type="text" name="Education" required /><br />
+            </div>
+            <div class="form-row">
+                <label for="Profession">Профессия:</label>
+                <input type="text" name="Profession" required /><br />
+            </div>
+            <div class="form-row">
+                <label for="Email">Электронная почта:</label>
+                <input type="email" name="Email" required /><br />
+            </div>
+        </div>
+        <button type="submit" class="submit-btn">Зарегистрировать работника</button>
+    </form>
+<div asp-validation-summary="All"></div>
+
+<a asp-controller="Employee" asp-action="Index">Отмена</a>
+</body>
+</html>

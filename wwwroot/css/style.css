@@ -1,0 +1,47 @@
+﻿.adaptive-form {
+    max-width: 100%;
+    padding: 1rem;
+}
+
+/* Сетка для полей */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+/* Стили для строк формы */
+.form-row {
+    display: flex;
+    flex-direction: column;
+    color: black;
+    min-width: 0;
+}
+
+/* Стилизация полей ввода */
+.form-row input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color:black;
+    background-color:gray;
+    margin-top: 0.3rem;
+}
+
+/* Кнопка */
+.submit-btn {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #007bff;
+    color: cyan;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 480px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

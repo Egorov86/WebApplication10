@@ -13,11 +13,14 @@ namespace WebApplication10
 
             builder.Services.AddScoped<DatabaseContext>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            //builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
             var app = builder.Build();
 
             app.MapControllerRoute("default", "{controller=Employee}/{action=Index}/{id?}");
+            //app.MapControllerRoute("default", "{controller=Users}/{action=Index}/{id?}");
 
+            app.UseStaticFiles();
             app.Run();
         }
     }

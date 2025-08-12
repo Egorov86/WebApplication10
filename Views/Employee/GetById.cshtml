@@ -1,26 +1,78 @@
-﻿@using WebApplication10.Data.Entities
-
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Подключаем CSS -->
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+@using WebApplication10.Data.Entities
 @model Employee
 
-<h1> Информация о сотруднике</h1>
+@{
+    ViewBag.Title = "Редактирование потенциального работника";
+}
+
+<h1>Редактирование потенциального работника</h1>
 <hr />
 
-<p>
-    <b>идентификатор сотрудника</b>: @Model.Id
-<p>
+<div asp-validation-summary="All"></div>
 
-<p>
-    <b>Имя сотрудника</b>: @Model.FirstName
-<p>
+    <form method="post" asp-action="EditEmployee" asp-route-id="@Model.Id" class="employee-form">
+        <input type="hidden" name="Id" value="@Model.Id" />
 
-<p>
-    <b>Фамилия сотрудника</b>: @Model.LastName
-<p>
+        <div class="form-row">
+            <label for="LastName">Фамилия:</label>
+            <input type="text" name="LastName" value="@Model.LastName" required />
+        </div>
 
-<p>
-    <b>Адрес электронной почты сотрудника</b>: @Model.Email
-<p>
+        <div class="form-row">
+            <label for="FirstName">Имя:</label>
+            <input type="text" name="FirstName" value="@Model.FirstName" required />
+        </div>
 
-<p>
-    <b>Дата регистрации сотрудника</b>: @Model.CreatedAt
-<p>
+        <div class="form-row">
+            <label for="MiddleName">Отчество:</label>
+            <input type="text" name="MiddleName" value="@Model.MiddleName" required />
+        </div>
+
+        <div class="form-row">
+            <label for="Education">Образование:</label>
+            <input type="text" name="Education" value="@Model.Education" required />
+        </div>
+
+        <div class="form-row">
+            <label for="Profession">Профессия:</label>
+            <input type="text" name="Profession" value="@Model.Profession" required />
+        </div>
+
+        <div class="form-row">
+            <label for="Email">Электронная почта:</label>
+            <input type="email" name="Email" value="@Model.Email" required />
+        </div>
+
+        <button type="submit" class="submit-btn">Обновить</button>
+    </form>
+<div asp-validation-summary="All"></div>
+
+<form method="post" asp-action="EditEmployee" asp-route-id="@Model.Id">
+    <!-- Остальная часть формы... -->
+</form>
+
+<!-- Новая кнопка для удаления -->
+<a href="#" onclick="confirmDelete('@Url.Action("DeleteEmployee", "Employee", new { id = Model.Id })')" class="btn btn-danger">
+    Удалить работника из базы
+</a>
+
+<script>
+    function confirmDelete(url) {
+        if (confirm('Вы уверены, что хотите удалить этого сотрудника?')) {
+            window.location.href = url;
+        }
+    }
+</script>
+
+<a asp-controller="Employee" asp-action="Index">Вернуться назад</a>
+</body>
+</html>

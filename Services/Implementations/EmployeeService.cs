@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿
+using Microsoft.Data.SqlClient;
 using System.Data;
 using WebApplication10.Data;
 using WebApplication10.Data.Entities;
@@ -19,8 +20,11 @@ namespace WebApplication10.Services.Implementations
             return new Employee()
             {
                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                 LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                MiddleName = reader.GetString(reader.GetOrdinal("MiddleName")),
+                Education = reader.GetString(reader.GetOrdinal("Education")),
+                Profession = reader.GetString(reader.GetOrdinal("Profession")),
                 Email = reader.GetString(reader.GetOrdinal("Email")),
                 CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"))
             };
@@ -86,6 +90,74 @@ namespace WebApplication10.Services.Implementations
                 command.Parameters.AddWithValue("@Id", id);
 
                 command.ExecuteNonQuery();
+            }
+        }
+        public void UpdateEmployee(Employee updatedEmployee)
+        {
+            using (SqlConnection connection = _database.CreateConnection())
+            {
+                connection.Open();
+
+                // Создаем команду SQL для обновления записи
+                SqlCommand command = connection.CreateCommand();
+                command.CommandText = @"UPDATE Employees SET 
+                                LastName=@LastName,
+                                FirstName=@FirstName,
+                                MiddleName=@MiddleName,
+                                Education=@Education,
+                                Profession=@Profession,
+                                Email=@Email WHERE Id=@Id;";
+
+                // Добавляем параметры команды
+                command.Parameters.AddWithValue("@LastName", updatedEmployee.LastName);
+                command.Parameters.AddWithValue("@FirstName", updatedEmployee.FirstName);
+                command.Parameters.AddWithValue("@MiddleName", updatedEmployee.MiddleName);
+                command.Parameters.AddWithValue("@Education", updatedEmployee.Education);
+                command.Parameters.AddWithValue("@Profession", updatedEmployee.Profession);
+                command.Parameters.AddWithValue("@Email", updatedEmployee.Email);
+                command.Parameters.AddWithValue("@Id", updatedEmployee.Id);
+
+                // Выполняем обновление
+                int rowsAffected = command.ExecuteNonQuery();
+
+                if (rowsAffected != 1)
+                {
+                    throw new InvalidOperationException($"Ошибка обновления сотрудника с ID {updatedEmployee.Id}.");
+                }
+            }
+        }
+        public void CreateEmployee(Employee newEmployee)
+        {
+            using (SqlConnection connection = _database.CreateConnection())
+            {
+                connection.Open();
+
+                SqlCommand command = connection.CreateCommand();
+                command.CommandText = @"INSERT INTO Employees(LastName, FirstName, MiddleName, Education, Profession, Email, CreatedAt) VALUES(@LastName, @FirstName, @MiddleName, @Education, @Profession, @Email, @CreatedAt)";
+
+                command.Parameters.AddWithValue("@LastName", newEmployee.LastName);
+                command.Parameters.AddWithValue("@FirstName", newEmployee.FirstName);
+                command.Parameters.AddWithValue("@MiddleName", newEmployee.MiddleName);
+                command.Parameters.AddWithValue("@Education", newEmployee.Education);
+                command.Parameters.AddWithValue("@Profession", newEmployee.Profession);
+                command.Parameters.AddWithValue("@Email", newEmployee.Email);
+                command.Parameters.AddWithValue("@CreatedAt", newEmployee.CreatedAt);
+
+                command.ExecuteNonQuery();
+            }
+        }
+        public IList<Employee> GetEmployees(string? sortOrder = null)
+        {
+            var employees = new List<Employee>();
+            //    = _repository.GetAll(); // Предположим, что получаем данные из репозитория
+            //var existingEmployee = _employeeService.GetEmployeeById(id);
+
+            switch (sortOrder)
+            {
+                case "lastname_desc":
+                    return employees.OrderByDescending(e => e.LastName).ToList();
+                default:
+                    return employees.OrderBy(e => e.LastName).ToList();
             }
         }
     }

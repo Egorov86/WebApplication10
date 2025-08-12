@@ -11,9 +11,11 @@ namespace WebApplication10.Data
             string? connectionString = configuration.GetConnectionString("Default");
 
             if (string.IsNullOrWhiteSpace(connectionString))
-                throw new MissingFieldException("Faield to get Default connection string");
+                throw new MissingFieldException("Failed to get Default connection string");
+
             _connectionString = connectionString;
         }
+
         public SqlConnection CreateConnection()
         {
             return new SqlConnection(_connectionString);
