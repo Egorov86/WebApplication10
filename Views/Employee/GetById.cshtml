@@ -48,6 +48,33 @@
         </div>
 
         <div class="form-row">
+            <label for="WorkExperience">Опыт работы(лет):</label>
+            <input type="text" name="WorkExperience" value="@Model.WorkExperience" required />
+        </div>
+        
+        <div class="form-row">
+            <label for="DateOfBirth">Дата рождения:</label>
+            <input type="date" name="DateOfBirth"
+                   value="@(Model.DateOfBirth.ToString("yyyy-MM-dd") ?? "")"
+                   required />
+        </div>
+        
+        <div class="form-row">
+            <label for="Address">Адрес:</label>
+            <input type="text" name="Address" value="@Model.Address" required />
+        </div>
+
+        <div class="form-row">
+            <label for="PhoneNumber">Номер тел:</label>
+            <input type="text" name="PhoneNumber" value="@Model.PhoneNumber" required />
+        </div>
+
+        <div class="form-row">
+            <label for="YearsOld">Возраст:</label>
+            <input type="text" name="YearsOld" value="@Model.YearsOld" readonly />
+        </div>
+
+        <div class="form-row">
             <label for="Email">Электронная почта:</label>
             <input type="email" name="Email" value="@Model.Email" required />
         </div>

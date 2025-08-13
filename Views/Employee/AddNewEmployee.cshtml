@@ -42,10 +42,34 @@
                 <label for="Profession">Профессия:</label>
                 <input type="text" name="Profession" required /><br />
             </div>
+
+            <div class="form-row">
+                <label for="WorkExperience">Опыт работы:</label>
+                <input type="text" name="WorkExperience" required /><br />
+            </div>
+
+            <div class="form-row">
+                <label for="DateOfBirth">Дата рождения:</label>
+                <input type="date" name="DateOfBirth"
+                       value="@(Model?.DateOfBirth.ToString("yyyy-MM-dd") ?? "")"
+                       required /><br />
+            </div>
+            
+            <div class="form-row">
+                <label for="Address">Адрес:</label>
+                <input type="text" name="Address" required /><br />
+            </div>
+
             <div class="form-row">
                 <label for="Email">Электронная почта:</label>
                 <input type="email" name="Email" required /><br />
             </div>
+
+            <div class="form-row">
+                <label for="PhoneNumber">Номер тел:</label>
+                <input type="text" name="PhoneNumber" required /><br />
+            </div>
+
         </div>
         <button type="submit" class="submit-btn">Зарегистрировать работника</button>
     </form>

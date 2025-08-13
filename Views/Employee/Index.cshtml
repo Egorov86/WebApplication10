@@ -26,21 +26,82 @@
     <p>Список потенциальных работников пуст.</p>
 }
 
-<div class="sort-options mb-3">
-    <span>Сортировать по: </span>
-    <a asp-controller="Employee" asp-action="Index" asp-route-sortOrder="lastname_asc" class="btn btn-secondary">Сортировать A-Я</a>
-    <a asp-controller="Employee" asp-action="Index" asp-route-sortOrder="lastname_desc" class="btn btn-secondary">Сортировать Я-А</a>
+<div class="sort-header">
+    <button class="sort-btn" onclick="sortTable('LastName')">Фамилия</button>
+    <button class="sort-btn" onclick="sortTable('Education')">Образование</button>
+    <button class="sort-btn" onclick="sortTable('Profession')">Профессия</button>
+    <button class="sort-btn" onclick="sortTable('YearsOld')">Возраст</button>
 </div>
-<ol>
+<ol class="employee-list">
     @foreach (Employee employee in employees)
     {
         <li>
             <a asp-controller="Employee" asp-action="GetById" asp-route-id="@employee.Id">
-                 @employee.LastName @employee.FirstName @employee.MiddleName @employee.Education @employee.Profession "@employee.Email"
+                <div>@employee.LastName @employee.FirstName @employee.MiddleName</div>
+                <div>@employee.Education</div>
+                <div>@employee.Profession</div>
+                <div>@employee.YearsOld</div>
             </a>
         </li>
     }
 </ol>
+<script>
+    // Текущее направление сортировки для каждой колонки
+    let sortDirections = {
+        'LastName': 'asc',
+        'Education': 'asc',
+        'Profession': 'asc',
+        'YearsOld': 'asc'
+    };
+
+    function sortTable(column) {
+        // Определяем направление сортировки
+        const direction = sortDirections[column] === 'asc' ? 'desc' : 'asc';
+        sortDirections[column] = direction;
+
+        // Получаем список элементов
+        const list = document.querySelector('.employee-list');
+        const items = Array.from(list.getElementsByTagName('li'));
+
+        // Сортируем элементы
+        items.sort((a, b) => {
+            const aValue = getCellValue(a, column);
+            const bValue = getCellValue(b, column);
+
+            if (column === 'YearsOld') {
+                // Числовая сортировка для возраста
+                return direction === 'asc' ? aValue - bValue : bValue - aValue;
+            } else {
+                // Строковая сортировка для остальных колонок
+                return direction === 'asc'
+                    ? aValue.localeCompare(bValue)
+                    : bValue.localeCompare(aValue);
+            }
+        });
+
+        // Очищаем список и добавляем отсортированные элементы
+        list.innerHTML = '';
+        items.forEach(item => list.appendChild(item));
+    }
+
+    function getCellValue(row, column) {
+        const divs = row.querySelectorAll('a div');
+        switch(column) {
+            case 'LastName':
+            case 'FirstName':
+            case 'MiddleName':
+                return divs[0].textContent.trim();
+            case 'Education':
+                return divs[1].textContent.trim();
+            case 'Profession':
+                return divs[2].textContent.trim();
+            case 'YearsOld':
+                return parseInt(divs[3].textContent.trim());
+            default:
+                return '';
+        }
+    }
+</script>
 <a asp-controller="Employee" asp-action="AddNewEmployee" class="btn btn-primary mb-3">
     Зарегистрировать нового работника
 </a>

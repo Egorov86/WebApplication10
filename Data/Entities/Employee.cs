@@ -8,5 +8,10 @@
         public required string Education { get; set; }
         public required string Profession { get; set; }
         public required string Email { get; set; }
+        public required int WorkExperience { get; set; } = 0;
+        public DateTime DateOfBirth { get; set; }
+        public required string Address { get; set; }
+        public int YearsOld { get; set; }
+        public required string PhoneNumber { get; set; }
     }
 }

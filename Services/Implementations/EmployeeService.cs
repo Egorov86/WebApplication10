@@ -17,6 +17,7 @@ namespace WebApplication10.Services.Implementations
 
         private Employee ReadEmployee(SqlDataReader reader)
         {
+
             return new Employee()
             {
                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
@@ -26,10 +27,14 @@ namespace WebApplication10.Services.Implementations
                 Education = reader.GetString(reader.GetOrdinal("Education")),
                 Profession = reader.GetString(reader.GetOrdinal("Profession")),
                 Email = reader.GetString(reader.GetOrdinal("Email")),
+                WorkExperience = reader.GetInt32(reader.GetOrdinal("WorkExperience")),
+                DateOfBirth = reader.GetDateTime(reader.GetOrdinal("DateOfBirth")),
+                Address = reader.GetString(reader.GetOrdinal("Address")),
+                PhoneNumber = reader.GetString(reader.GetOrdinal("PhoneNumber")),
+                YearsOld = reader.GetInt32(reader.GetOrdinal("YearsOld")),
                 CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"))
             };
         }
-
         public IList<Employee> GetEmployees()
         {
             IList<Employee> employees = new List<Employee>();
@@ -106,6 +111,10 @@ namespace WebApplication10.Services.Implementations
                                 MiddleName=@MiddleName,
                                 Education=@Education,
                                 Profession=@Profession,
+                                WorkExperience=@WorkExperience,
+                                DateOfBirth=@DateOfBirth,
+                                Address=@Address,                               
+                                PhoneNumber=@PhoneNumber,                               
                                 Email=@Email WHERE Id=@Id;";
 
                 // Добавляем параметры команды
@@ -115,6 +124,10 @@ namespace WebApplication10.Services.Implementations
                 command.Parameters.AddWithValue("@Education", updatedEmployee.Education);
                 command.Parameters.AddWithValue("@Profession", updatedEmployee.Profession);
                 command.Parameters.AddWithValue("@Email", updatedEmployee.Email);
+                command.Parameters.AddWithValue("@WorkExperience", updatedEmployee.WorkExperience);
+                command.Parameters.AddWithValue("@DateOfBirth", updatedEmployee.DateOfBirth);
+                command.Parameters.AddWithValue("@Address", updatedEmployee.Address);
+                command.Parameters.AddWithValue("@PhoneNumber", updatedEmployee.PhoneNumber);                
                 command.Parameters.AddWithValue("@Id", updatedEmployee.Id);
 
                 // Выполняем обновление
@@ -133,7 +146,8 @@ namespace WebApplication10.Services.Implementations
                 connection.Open();
 
                 SqlCommand command = connection.CreateCommand();
-                command.CommandText = @"INSERT INTO Employees(LastName, FirstName, MiddleName, Education, Profession, Email, CreatedAt) VALUES(@LastName, @FirstName, @MiddleName, @Education, @Profession, @Email, @CreatedAt)";
+                command.CommandText = @"INSERT INTO Employees(LastName, FirstName, MiddleName, Education, Profession, Email, WorkExperience, DateOfBirth, Address, PhoneNumber, CreatedAt) 
+                                     VALUES(@LastName, @FirstName, @MiddleName, @Education, @Profession, @Email, @WorkExperience, @DateOfBirth, @Address, @PhoneNumber, @CreatedAt)";
 
                 command.Parameters.AddWithValue("@LastName", newEmployee.LastName);
                 command.Parameters.AddWithValue("@FirstName", newEmployee.FirstName);
@@ -141,6 +155,10 @@ namespace WebApplication10.Services.Implementations
                 command.Parameters.AddWithValue("@Education", newEmployee.Education);
                 command.Parameters.AddWithValue("@Profession", newEmployee.Profession);
                 command.Parameters.AddWithValue("@Email", newEmployee.Email);
+                command.Parameters.AddWithValue("@WorkExperience", newEmployee.WorkExperience);
+                command.Parameters.AddWithValue("@DateOfBirth", newEmployee.DateOfBirth);
+                command.Parameters.AddWithValue("@Address", newEmployee.Address);
+                command.Parameters.AddWithValue("@PhoneNumber", newEmployee.PhoneNumber);                
                 command.Parameters.AddWithValue("@CreatedAt", newEmployee.CreatedAt);
 
                 command.ExecuteNonQuery();
@@ -160,5 +178,6 @@ namespace WebApplication10.Services.Implementations
                     return employees.OrderBy(e => e.LastName).ToList();
             }
         }
+        
     }
 }
