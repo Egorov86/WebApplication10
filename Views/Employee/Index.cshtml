@@ -26,83 +26,99 @@
     <p>Список потенциальных работников пуст.</p>
 }
 
-<div class="sort-header">
-    <button class="sort-btn" onclick="sortTable('LastName')">Фамилия</button>
-    <button class="sort-btn" onclick="sortTable('Education')">Образование</button>
-    <button class="sort-btn" onclick="sortTable('Profession')">Профессия</button>
-    <button class="sort-btn" onclick="sortTable('YearsOld')">Возраст</button>
-</div>
-<ol class="employee-list">
-    @foreach (Employee employee in employees)
-    {
-        <li>
-            <a asp-controller="Employee" asp-action="GetById" asp-route-id="@employee.Id">
-                <div>@employee.LastName @employee.FirstName @employee.MiddleName</div>
-                <div>@employee.Education</div>
-                <div>@employee.Profession</div>
-                <div>@employee.YearsOld</div>
-            </a>
-        </li>
-    }
-</ol>
+<table class="employees-table">
+    <thead>
+        <tr>
+            <th>
+                <button class="sort-btn" onclick="sortTable('LastName')">
+                    ФИО работника <span class="sort-icon" id="sortLastNameIcon">↓</span>
+                </button>
+            </th>
+            <th>
+                <button class="sort-btn" onclick="sortTable('Education')">
+                    Образование <span class="sort-icon" id="sortEducationIcon"></span>
+                </button>
+            </th>
+            <th>
+                <button class="sort-btn" onclick="sortTable('Profession')">
+                    Профессия <span class="sort-icon" id="sortProfessionIcon"></span>
+                </button>
+            </th>
+            <th>
+                <button class="sort-btn" onclick="sortTable('YearsOld')">
+                    Возраст <span class="sort-icon" id="sortYearsOldIcon"></span>
+                </button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in employees)
+        {
+            <tr>
+                <td data-label="ФИО">
+                    <a asp-controller="Employee" asp-action="GetById" asp-route-id="@employee.Id">
+                        @employee.LastName @employee.FirstName @employee.MiddleName
+                    </a>
+                </td>
+                <td data-label="Образование">@employee.Education</td>
+                <td data-label="Профессия">@employee.Profession</td>
+                <td data-label="Возраст">@employee.YearsOld</td>
+            </tr>
+        }
+    </tbody>
+</table>
 <script>
-    // Текущее направление сортировки для каждой колонки
-    let sortDirections = {
-        'LastName': 'asc',
-        'Education': 'asc',
-        'Profession': 'asc',
-        'YearsOld': 'asc'
+    let currentSort = {
+        column: '',
+        direction: 'asc'
     };
 
-    function sortTable(column) {
-        // Определяем направление сортировки
-        const direction = sortDirections[column] === 'asc' ? 'desc' : 'asc';
-        sortDirections[column] = direction;
+            function sortTable(column) {
+            const table = document.querySelector('.employees-table');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const icon = document.getElementById(`sort${column}Icon`);
 
-        // Получаем список элементов
-        const list = document.querySelector('.employee-list');
-        const items = Array.from(list.getElementsByTagName('li'));
+            // Определяем направление сортировки
+            const direction = icon.textContent === '↑' ? 'desc' : 'asc';
 
-        // Сортируем элементы
-        items.sort((a, b) => {
-            const aValue = getCellValue(a, column);
-            const bValue = getCellValue(b, column);
+            // Сбрасываем иконки у всех кнопок
+            document.querySelectorAll('.sort-icon').forEach(i => i.textContent = '');
 
-            if (column === 'YearsOld') {
-                // Числовая сортировка для возраста
-                return direction === 'asc' ? aValue - bValue : bValue - aValue;
-            } else {
-                // Строковая сортировка для остальных колонок
-                return direction === 'asc'
-                    ? aValue.localeCompare(bValue)
-                    : bValue.localeCompare(aValue);
-            }
-        });
+            // Устанавливаем новую иконку
+            icon.textContent = direction === 'asc' ? '↑' : '↓';
 
-        // Очищаем список и добавляем отсортированные элементы
-        list.innerHTML = '';
-        items.forEach(item => list.appendChild(item));
-    }
+            // Сортируем строки
+            rows.sort((a, b) => {
+                const aValue = a.cells[getColumnIndex(column)].textContent.trim();
+                const bValue = b.cells[getColumnIndex(column)].textContent.trim();
 
-    function getCellValue(row, column) {
-        const divs = row.querySelectorAll('a div');
-        switch(column) {
-            case 'LastName':
-            case 'FirstName':
-            case 'MiddleName':
-                return divs[0].textContent.trim();
-            case 'Education':
-                return divs[1].textContent.trim();
-            case 'Profession':
-                return divs[2].textContent.trim();
-            case 'YearsOld':
-                return parseInt(divs[3].textContent.trim());
-            default:
-                return '';
+                if (column === 'YearsOld') {
+                    return direction === 'asc'
+                        ? parseInt(aValue) - parseInt(bValue)
+                        : parseInt(bValue) - parseInt(aValue);
+                } else {
+                    return direction === 'asc'
+                        ? aValue.localeCompare(bValue)
+                        : bValue.localeCompare(aValue);
+                }
+            });
+
+            // Перестраиваем таблицу
+            rows.forEach(row => tbody.appendChild(row));
         }
-    }
+
+        function getColumnIndex(column) {
+            switch(column) {
+                case 'LastName': return 0;
+                case 'Education': return 1;
+                case 'Profession': return 2;
+                case 'YearsOld': return 3;
+                default: return 0;
+            }
+        }
 </script>
-<a asp-controller="Employee" asp-action="AddNewEmployee" class="btn btn-primary mb-3">
+    <a asp-controller="Employee" asp-action="AddNewEmployee" class="btn btn-primary mb-3">
     Зарегистрировать нового работника
 </a>
 </body>

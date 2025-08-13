@@ -1,81 +1,118 @@
-﻿.adaptive-form {
-    max-width: 100%;
-    padding: 1rem;
+﻿.employees-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
 }
 
-/* Сетка для полей */
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-}
-
-/* Стили для строк формы */
-.form-row {
-    display: flex;
-    flex-direction: column;
-    color: black;
-    min-width: 0;
-}
-
-/* Стилизация полей ввода */
-.form-row input {
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    color:black;
-    background-color:gray;
-    margin-top: 0.3rem;
-}
-
-/* Кнопка */
-.submit-btn {
-    margin-top: 1rem;
-    padding: 0.75rem 1.5rem;
-    background-color: #007bff;
-    color: cyan;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-/* Адаптация для мобильных */
-@media (max-width: 480px) {
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-}
-.employee-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 10px;
-    padding: 0;
-}
-
-    .employee-list li {
-        list-style: none;
-        padding: 10px;
-        border-bottom: 1px solid #eee;
+    .employees-table thead th {
+        position: sticky;
+        top: 0;
+        background-color: #1a75ff;
+        color: white;
+        padding: 12px 8px;
+        text-align: center;
+        font-weight: 600;
+        z-index: 10;
     }
 
-.sort-header {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 10px;
-    padding: 10px;
-    background-color: #f5f5f5;
-    font-weight: bold;
-}
+    .employees-table tbody td {
+        padding: 10px 8px;
+        background-color: white;
+        border-bottom: 1px solid #f0f0f0;
+        text-align: center;
+        vertical-align: middle;
+    }
 
+    .employees-table tbody tr:nth-child(even) td {
+        background-color: #f9f9f9;
+    }
+
+    .employees-table a {
+        color: #0066cc;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+        .employees-table a:hover {
+            color: #004080;
+            text-decoration: underline;
+        }
+
+/* Стили для кнопок сортировки */
 .sort-btn {
     background: none;
     border: none;
+    color: white;
+    font-weight: 600;
     cursor: pointer;
-    text-align: left;
-    font-weight: bold;
-    padding: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 4px;
 }
 
     .sort-btn:hover {
-        background-color: #e0e0e0;
+        background-color: rgba(255, 255, 255, 0.2);
     }
+
+.sort-icon {
+    font-size: 0.8em;
+    transition: transform 0.2s;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .employees-table {
+        display: block;
+    }
+
+        .employees-table thead {
+            display: none;
+        }
+
+        .employees-table tbody,
+        .employees-table tr,
+        .employees-table td {
+            display: block;
+            width: 100%;
+        }
+
+        .employees-table td {
+            text-align: right;
+            padding: 8px 12px;
+            position: relative;
+            padding-left: 110px;
+        }
+
+            .employees-table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-weight: bold;
+                color: #555;
+                text-align: left;
+                width: 100px;
+            }
+
+            /* Лейблы для каждой колонки */
+            .employees-table td:nth-child(1):before {
+                content: "ФИО";
+            }
+
+            .employees-table td:nth-child(2):before {
+                content: "Образование";
+            }
+
+            .employees-table td:nth-child(3):before {
+                content: "Профессия";
+            }
+
+            .employees-table td:nth-child(4):before {
+                content: "Возраст";
+            }
+}
